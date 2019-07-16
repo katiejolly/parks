@@ -1,0 +1,190 @@
+---
+title: "Saint Paul Parks and Rec"
+output: html_document
+---
+
+```{r setup include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(ggchicklet)
+library(sf)
+library(showtext)
+
+font_add_google("Lato", regular.wt = 300, bold.wt = 400)
+showtext_auto()
+
+```
+
+
+```{r}
+park_survey <- read_csv("https://information.stpaul.gov/resource/tahx-25ii.csv") %>%
+  janitor::clean_names()
+public_buildings <- st_read("https://information.stpaul.gov/resource/3giy-3djb.geojson") %>%
+  st_transform(26915) # UTM15N
+
+rec_centers <- public_buildings %>%
+  filter(building_type == "Recreation Center")
+```
+
+
+
+```{r}
+x1 <- park_survey %>%
+  select(contains("x1_")) %>%
+  gather(key = "question", value = "response", 1:3) %>%
+  group_by(question, response) %>%
+  count() %>%
+  group_by(question) %>%
+  mutate(prop = n / sum(n))
+
+questions <- tibble(
+  question = unique(x1$question),
+  keyword = c("Recreation and community centers", "Passive park and green spaces", "Regional parks")
+)
+
+x1 <- x1 %>%
+  left_join(questions) %>%
+  mutate(response = factor(response, levels = c("I/we don't use this",  "A few times a year", "A few times a month", "A few times a week", "Almost daily")))
+
+daily_rank <- x1 %>% 
+  filter(response == "Almost daily") %>%
+  arrange(prop) %>%
+  pull(keyword)
+
+x1 <- x1 %>%
+  mutate(keyword = factor(keyword, levels = daily_rank))
+
+ggplot(x1, aes(x = keyword, y = prop, fill = response)) +
+  geom_chicklet(width = 0.3) +
+  coord_flip() +
+  theme_minimal() +
+  scale_fill_manual(values = c("#C70E7B", "#FC6882",  "#172869", "#1BB6AF", "#dae1ed")) +
+  labs(caption = "Parks And Recreation Community Interest Survey Dataset, Summer 2016\nRetrieved from Saint Paul Open Information", title = "On average, how often does your family use:", y = "Proportion of responses", x = "") +
+  theme(text = element_text(color = "#51576b"),
+        axis.text = element_text(color = "#51576b")) +
+  guides(fill = guide_legend(title = "Rating"))
+```
+
+```{r}
+ggplot(park_survey, aes(x = as.character(zip_code), y = x2_based_on_your_experiences_please_rate_the_condition_of_each_of_the_following_amenities_biking_t_1, group = timestamp, fill = topic)) +
+  geom_chicklet(width = 0.75)
+
+ggplot(park_survey, aes(x = x2_based_on_your_experiences_please_rate_the_condition_of_each_of_the_following_amenities_biking_t_1)) +
+  geom_bar()
+
+
+x2 <- park_survey %>%
+  select(contains("x2")) %>%
+  gather(key = "question", value = "response", 1:17) %>%
+  group_by(question, response) %>%
+  count() %>%
+  group_by(question) %>%
+  mutate(prop = n / sum(n))
+
+questions <- tibble(
+  question = unique(x2$question),
+  keyword = c("Athletic fields", "Basketball courts", "Biking trails", "Boating facilities", "Community centers", "Fishing areas", "Golf courses", "Off-leash dog parks", "Outdoor ice skating rinks", "Outdoor swimming pools", "Park restrooms", "Parking lots", "Picnic areas", "Picnic shelters", "Playground equiptment", "Tennis courts", "Walking trails and paths")
+)
+
+x2 <- x2 %>%
+  left_join(questions) %>%
+  mutate(response = factor(response, levels = c("Excellent", "Good", "Fair", "Poor", "I/we don't use this")))
+
+excellent_rank <- x2 %>% 
+  filter(response == "Excellent") %>%
+  arrange(prop) %>%
+  pull(keyword)
+
+x2 <- x2 %>%
+  mutate(keyword = factor(keyword, levels = excellent_rank))
+
+
+ggplot(x2, aes(x = keyword, y = prop, fill = response)) +
+  geom_chicklet() +
+  coord_flip() +
+  theme_minimal() +
+  scale_fill_manual(values = c("#C70E7B", "#FC6882",  "#172869", "#1BB6AF", "#dae1ed")) +
+  labs(caption = "Parks And Recreation Community Interest Survey Dataset, Summer 2016\nRetrieved from Saint Paul Open Information", title = "Based on your experiences, rate your opinion of:", y = "Proportion of responses", x = "") +
+  theme(text = element_text(color = "#51576b"),
+        axis.text = element_text(color = "#51576b")) +
+  guides(fill = guide_legend(title = "Rating"))
+```
+
+```{r}
+x4 <- park_survey %>%
+  select(contains("x4"))%>%
+  gather(key = "question", value = "response", 1:18) %>%
+  group_by(question, response) %>%
+  count() %>%
+  group_by(question) %>%
+  mutate(prop = n / sum(n))
+
+questions <- tibble(
+  question = unique(x4$question),
+  keyword = c("Athletic fields", "Basketball courts", "Biking trails", "Boating facilities", "Community centers", "Fishing areas", "Golf courses", "Off-leash dog parks", "Outdoor ice skating rinks", "Outdoor swimming pools", "Park restrooms", "Parking lots", "Picnic areas", "Picnic shelters", "Playground equiptment", "Small neighborhood parks", "Tennis courts", "Walking trails and paths")
+)
+
+x4 <- x4 %>%
+  left_join(questions) %>%
+  mutate(response = factor(response, levels = c("Highest priority", "Priority", "Low priority", "Not a priority", "No opinion")))
+
+priority_rank <- x4 %>% 
+  filter(response == "Highest priority") %>%
+  arrange(prop) %>%
+  pull(keyword)
+
+x4 <- x4 %>%
+  mutate(keyword = factor(keyword, levels = priority_rank))
+
+
+ggplot(x4, aes(x = keyword, y = prop, fill = response)) +
+  geom_chicklet() +
+  coord_flip() +
+  theme_minimal() +
+  scale_fill_manual(values = c("#C70E7B", "#FC6882",  "#172869", "#1BB6AF", "#dae1ed")) +
+  labs(caption = "Parks And Recreation Community Interest Survey Dataset, Summer 2016\nRetrieved from Saint Paul Open Information", title = "How would you prioritize investment in:", y = "Proportion of responses", x = "") +
+  theme(text = element_text(color = "#51576b"),
+        axis.text = element_text(color = "#51576b")) +
+  guides(fill = guide_legend(title = "Rating"))
+```
+
+```{r}
+x9 <- park_survey %>%
+  select(contains("x9")) %>%
+  rename(participation = x9_has_any_member_of_your_household_participated_in_any_city_parks_and_recreation_programs_in_the_1) %>% 
+  group_by(participation) %>%
+  count() %>%
+  ungroup()
+
+ggplot(x9, aes(x = participation, y = n)) +
+  geom_chicklet(fill = "#f5b44c") +
+  coord_flip() +
+  theme_minimal() +
+  theme(text = element_text(color = "#51576b"),
+        axis.text = element_text(color = "#51576b")) +
+  labs(caption = "Parks And Recreation Community Interest Survey Dataset, Summer 2016\nRetrieved from Saint Paul Open Information", title = "Has any member of your household participated in any City Parks and\nRecreation programs in the past year?", y = "Respondents", x = "")
+```
+
+
+```{r}
+x10 <- park_survey %>%
+  select(contains("x10")) %>%
+  rename(overall_quality_rating = x10_how_would_you_rate_the_overall_quality_of_the_program_s) %>%
+  group_by(overall_quality_rating) %>%
+  count() %>% 
+  ungroup() %>%
+  mutate(overall_quality_rating = factor(overall_quality_rating, levels = c("I/we don't participate","Poor" , "Fair", "Good", "Excellent"))) %>%
+  filter(overall_quality_rating != "I/we don't participate")
+
+ggplot(x10, aes(x = overall_quality_rating, y = n)) +
+  geom_chicklet(fill = "#f5b44c") +
+  coord_flip() +
+  theme_minimal() +
+  theme(text = element_text(color = "#51576b"),
+        axis.text = element_text(color = "#51576b")) +
+  labs(caption = "Parks And Recreation Community Interest Survey Dataset, Summer 2016\nRetrieved from Saint Paul Open Information", title = "How would you rate the overall quality of the program(s)?", y = "Respondents", x = "")
+```
+

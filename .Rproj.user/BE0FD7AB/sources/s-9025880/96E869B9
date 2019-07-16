@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563307130528.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "96E869B9",
+    "lastKnownWriteTime" : 30962681237012597,
+    "last_content_update" : 1563307130528,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "D1E833E8",
+        "caption" : "public_buildings",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=public_buildings&cache_key=D1E833E8",
+        "displayedObservations" : 53,
+        "environment" : "",
+        "object" : "public_buildings",
+        "preview" : 0,
+        "totalObservations" : 53,
+        "variables" : 16
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

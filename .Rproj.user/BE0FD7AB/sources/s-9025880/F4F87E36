@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563306408513.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3866427336",
+    "id" : "F4F87E36",
+    "lastKnownWriteTime" : 1563314892,
+    "last_content_update" : 1563314892246,
+    "path" : "~/blog/parks_survey.Rmd",
+    "project_path" : "parks_survey.Rmd",
+    "properties" : {
+        "cursorPosition" : "68,0",
+        "scrollLine" : "67",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563309341984.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "8DE13E80",
+    "lastKnownWriteTime" : 30962681237012597,
+    "last_content_update" : 1563309341984,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "88074D4B",
+        "caption" : "debates2019",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=debates2019&cache_key=88074D4B",
+        "displayedObservations" : 192,
+        "environment" : "",
+        "object" : "debates2019",
+        "preview" : 0,
+        "totalObservations" : 192,
+        "variables" : 4
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

@@ -1,0 +1,12 @@
+"0","park_survey <- read_csv(""https://information.stpaul.gov/resource/tahx-25ii.csv"") %>%
+  janitor::clean_names()
+"
+"2","Parsed with column specification:
+cols(
+  .default = col_character(),
+  timestamp = [34mcol_datetime(format = """")[39m,
+  count = [32mcol_double()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"
